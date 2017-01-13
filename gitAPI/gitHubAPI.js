@@ -1,20 +1,18 @@
-var GitHubApi = require("github");
+var request = require('request');
 
-var github = new GitHubApi({
-    debug: true,
-    protocol: "https",
-    host: "api.github.com", 
-    pathPrefix: "", 
-    headers: {
-        "user-agent": "rkterungwa16" 
-    },
-    Promise: require('bluebird'),
-    followRedirects: false, 
-    timeout: 5000
-});
+var options = {
+  url: 'https://api.github.com/repos/request/request',
+  headers: {
+    'User-Agent': 'request'
+  }
+};
 
-github.users.getFollowingForUser({
-    username: "rkterungwa16"
-}, function(err, res) {
-    console.log(JSON.stringify(res));
-});
+function callback(error, response, body) {
+  if (!error && response.statusCode == 200) {
+    var info = JSON.parse(body);
+    console.log(info.stargazers_count + " Stars");
+    console.log(info.forks_count + " Forks");
+  }
+}
+
+request(options, callback);
